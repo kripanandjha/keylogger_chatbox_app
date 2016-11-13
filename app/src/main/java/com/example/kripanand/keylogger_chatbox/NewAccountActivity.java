@@ -50,6 +50,7 @@ public class NewAccountActivity extends AppCompatActivity {
         final String uPassword1 = password1.getText().toString();
         final String uPassword2 = password2.getText().toString();
 
+
         if (uEmail.equals("") || uPhone.equals("") || uName.equals("") || uPassword1.equals("") || uPassword2.equals("")){
             AlertDialog.Builder dialog = new AlertDialog.Builder(NewAccountActivity.this);
             dialog.setTitle("Empty Fields");
@@ -61,7 +62,19 @@ public class NewAccountActivity extends AppCompatActivity {
                 }
             });
             dialog.show();
+        }else if(!uPassword1.equals(uPassword2)){
+            AlertDialog.Builder dialog = new AlertDialog.Builder(NewAccountActivity.this);
+            dialog.setTitle("Password missmatch");
+            dialog.setMessage("The two passwords do not match!");
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         }else{
+
             ParseUser user = new ParseUser();
 
             //set core properties
@@ -75,6 +88,7 @@ public class NewAccountActivity extends AppCompatActivity {
             user.signUpInBackground(new SignUpCallback() {
                 @Override
                 public void done(ParseException e) {
+
                     if (e == null){
                         emailAddress.setEnabled(false);
                         phoneNumber.setEnabled(false);
@@ -82,7 +96,9 @@ public class NewAccountActivity extends AppCompatActivity {
                         password1.setEnabled(false);
                         password2.setEnabled(false);
                         newAccountBtn.setEnabled(false);
-                        loguserin(uPhone,uPassword1);
+                        //loguserin(uPhone,uPassword1);
+                    }else{
+
                     }
                 }
             });
@@ -91,11 +107,13 @@ public class NewAccountActivity extends AppCompatActivity {
     }
 
     private void loguserin(String uPhone, String uPassword1) {
+
         if (!uPhone.equals("") || !uPassword1.equals("")){
             ParseUser.logInInBackground(uPhone, uPassword1, new LogInCallback() {
                 @Override
                 public void done(ParseUser user, ParseException e) {
                     if (e == null){
+
                         startActivity(new Intent(NewAccountActivity.this, ChatActivity.class));
 
                     }else{

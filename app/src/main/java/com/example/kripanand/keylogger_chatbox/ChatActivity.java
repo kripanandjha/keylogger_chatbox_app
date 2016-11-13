@@ -1,6 +1,7 @@
 package com.example.kripanand.keylogger_chatbox;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,8 +18,6 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -29,22 +28,8 @@ public class ChatActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList<Message> mMessages;
     private ChatAdapter mAdapter;
-    private Handler handler = new Handler() {
-        @Override
-        public void publish(LogRecord record) {
+    private Handler handler = new Handler();
 
-        }
-
-        @Override
-        public void flush() {
-
-        }
-
-        @Override
-        public void close() throws SecurityException {
-
-        }
-    };
     private static final int MAX_MSG_TO_SHOW = 70;
 
     @Override
@@ -53,7 +38,21 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         getCurrentUser();
+
+        handler.postDelayed(runnable,100);
+
+
     }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+
+            refreshMessages();
+            handler.postDelayed(this,100);
+
+        }
+    };
 
     private void getCurrentUser(){
         currentUserId = ParseUser.getCurrentUser().getObjectId();

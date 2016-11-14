@@ -1,4 +1,4 @@
-package com.example.kripanand.keylogger_chatbox;
+package com.example.myapplication;
 
 import org.junit.Test;
 

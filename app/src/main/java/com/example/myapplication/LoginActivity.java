@@ -31,7 +31,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText etpassword = (EditText) findViewById(R.id.password);
         final Button btlogin = (Button) findViewById(R.id.email_sign_in_button);
 
-        btlogin.setOnClickListener(new OnClickListener() {
+        btlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -64,17 +66,23 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+
+                            System.out.println("--------response. "+response);
                             JSONObject jsonresponse = new JSONObject(response);
+                            //System.out.println("email "+username+"--------response. "+response+"--username "+jsonresponse.getString("username"));
+
+
                             boolean success = jsonresponse.getBoolean("success");
 
                             if (success) {
-                                String name = (String) jsonresponse.get("name");
-                                String mobile = (String) jsonresponse.get("mobile");
+                                System.out.println("-------successful------------ ");
+                                String name1 = jsonresponse.getString("name");
+                                int users_id = jsonresponse.getInt("users_id");
 
-                                Intent intent = new Intent(LoginActivity.this, UserAreaActivity.class);
-                                intent.putExtra("name", name);
-                                intent.putExtra("username", username);
-                                intent.putExtra("mobile", mobile);
+                                Intent intent = new Intent(LoginActivity.this,ChatActivity.class);
+                                //Intent intent = new Intent(LoginActivity.this,UserAreaActivity.class);
+                                intent.putExtra("name",name1);
+                                intent.putExtra("users_id",users_id);
 
                                 LoginActivity.this.startActivity(intent);
                             } else {
@@ -91,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 };
                 LoginRequest loginrequest = new LoginRequest(username,password,responseListener);
+                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+                queue.add(loginrequest);
             }
 
         });

@@ -22,9 +22,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" android:label="@string/title_activity_login"/>
-        <activity android:name=".NewAccountActivity"/>
+        <activity android:name=".NewAccountActivity" android:label="@string/New_account"/>
         <activity android:name=".UserAreaActivity" />
         <activity android:name=".ChatActivity" />
+        <activity android:name=".ContactActivity" android:label="@string/title_activity_contact" />
+
+
         <service
             android:name=".MyFirebaseInstanceIDService">
             <intent-filter>

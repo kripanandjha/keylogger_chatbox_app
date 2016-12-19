@@ -13,7 +13,7 @@ public class RegisterRequest extends StringRequest {
     private static final String REGISTER_REQUEST_URL = "http://10.0.2.2/Register2.php";
     private Map<String, String> params;
 
-    public RegisterRequest(String name, String username,  String MobileId , String password,Response.Listener<String> listener) {
+    public RegisterRequest(String name, String username,  String MobileId , String password, String privateKey, String publicKey, String salt, String iv,Response.Listener<String> listener) {
 
         super(Method.POST, REGISTER_REQUEST_URL, listener, null);
         params = new HashMap<>();
@@ -21,6 +21,10 @@ public class RegisterRequest extends StringRequest {
         params.put("username", username);
         params.put("MobileId", MobileId);
         params.put("password", password);
+        params.put("privateKey", privateKey);
+        params.put("publicKey", publicKey);
+        params.put("salt", salt);
+        params.put("iv", iv);
 
     }
 

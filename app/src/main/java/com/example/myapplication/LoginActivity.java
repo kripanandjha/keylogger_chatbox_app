@@ -38,6 +38,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         final EditText email = (EditText) findViewById(R.id.email);
         final EditText etpassword = (EditText) findViewById(R.id.password);
         final Button btlogin = (Button) findViewById(R.id.email_sign_in_button);
+        final int KEY_LENGTH = 256;
+
 
         btlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
 
-                            System.out.println("--------response. "+response);
+
                             JSONObject jsonresponse = new JSONObject(response);
                             //System.out.println("email "+username+"--------response. "+response+"--username "+jsonresponse.getString("username"));
 
@@ -79,10 +83,19 @@ public class LoginActivity extends AppCompatActivity {
                                 String name1 = jsonresponse.getString("name");
                                 int users_id = jsonresponse.getInt("users_id");
 
-                                Intent intent = new Intent(LoginActivity.this,ChatActivity.class);
+                                PrivateKey privateKey = new PrivateKey();
+
+                                privateKey.setPrivateKey(jsonresponse.getString("privateKey"));
+                                privateKey.setPublicKey1(jsonresponse.getString("publicKey"));
+                                privateKey.setSalt(jsonresponse.getString("salt"));
+                                privateKey.setIv(jsonresponse.getString("iv"));
+                                AES aes = new AES();
+                                aes.decrypt(KEY_LENGTH,password.toCharArray(),privateKey);
+                                Intent intent = new Intent(LoginActivity.this,ContactActivity.class);
                                 //Intent intent = new Intent(LoginActivity.this,UserAreaActivity.class);
                                 intent.putExtra("name",name1);
                                 intent.putExtra("users_id",users_id);
+                                intent.putExtra("privateKey", (Serializable) privateKey);
 
                                 LoginActivity.this.startActivity(intent);
                             } else {
@@ -93,6 +106,14 @@ public class LoginActivity extends AppCompatActivity {
                                         .show();
                             }
                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (AES.InvalidPasswordException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (AES.StrongEncryptionNotAvailableException e) {
+                            e.printStackTrace();
+                        } catch (AES.InvalidAESStreamException e) {
                             e.printStackTrace();
                         }
 

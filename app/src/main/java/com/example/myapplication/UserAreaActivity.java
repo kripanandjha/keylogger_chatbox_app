@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -23,7 +24,7 @@ public class UserAreaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_area);
 
         final TextView etmsg = (TextView) findViewById(R.id.tvWelcomMsg);
-        final Button btsend = (Button) findViewById(R.id.buttonSend);
+        final ImageButton btsend = (ImageButton) findViewById(R.id.buttonSend);
         Intent intent = getIntent();
         //String name = intent.getStringExtra("name");
         String name = intent.getStringExtra("name");
